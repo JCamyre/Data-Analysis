@@ -1,6 +1,7 @@
 from requests import get 
 import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
+import pandas as pd
 
 def get_history(username):
 	url = f'https://data.typeracer.com/pit/race_history?user={username}&n=100&startDate='
@@ -14,7 +15,11 @@ def get_history(username):
 def graph_history(soup):
 	info_table = soup.find('table', {'class': 'scoresTable'})
 	scores = pd.DataFrame(columns={'Race #', 'Date', 'WPM', 'Accuracy', 'Position'})
-	print(info_table.get_text().split())
+	yo = info_table.get_text().split()[8:]
+	for i, _ in enumerate(yo)[::9]:
+		print(yo[i])
+
+
 
 
 graph_history(get_history('itypesomewhatalot'))
