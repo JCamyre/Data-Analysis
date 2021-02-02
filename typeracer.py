@@ -11,10 +11,8 @@ def get_history(username):
 	soup = BeautifulSoup(response.content, 'lxml')
 	return soup
 
-
-
 def graph_history(soup):
-	info_table = soup.find(soup, {'class': 'scoresTable'})
+	info_table = soup.find('table', {'class': 'scoresTable'})
 	print(info_table)
 
 graph_history(get_history('itypesomewhatalot'))
