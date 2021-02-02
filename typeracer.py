@@ -13,6 +13,9 @@ def get_history(username):
 
 def graph_history(soup):
 	info_table = soup.find('table', {'class': 'scoresTable'})
-	print(info_table)
+	scores = pd.DataFrame(columns={'Race #', 'Date', 'WPM', 'Accuracy', 'Position'})
+	print(info_table.get_text().split())
+
 
 graph_history(get_history('itypesomewhatalot'))
+	
