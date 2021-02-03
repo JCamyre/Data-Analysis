@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 from bs4 import BeautifulSoup
 import pandas as pd
 from datetime import datetime
+import matplotlib.dates as mdates
+import numpy as np
+
+months = mdates.MonthLocator()
 
 def get_history(username):
 	url = f'https://data.typeracer.com/pit/race_history?user={username}&n=100&startDate='
@@ -22,11 +26,29 @@ def graph_history(soup):
 	values = info_table.get_text().split()[8:]
 	for i in range(len(values))[::9]:
 		racenum, wpm, _, accuracy, _, _, *date = values[i:i+9]
+		accuracy = float(accuracy[:-1])
 		if date[0] in date_converter:
 			date[0] = date_converter[date[0]]
 		scores = scores.append({'Race#': racenum, 'Date': datetime.strptime(' '.join(date), '%B %d, %Y'), 'WPM': wpm, 'Accuracy': accuracy}, ignore_index=True)
 	scores = scores.set_index(['Date']).sort_index(ascending=False)
 	return scores
 
-print(graph_history(get_history('itypesomewhatalot')))
-	
+data = graph_history(get_history('itypesomewhatalot'))[:10]
+fig, ax = plt.subplots()
+ax.plot(data['Race#'], 'WPM', data=data)	
+
+# ax.xaxis.set_major_locator(months)
+# datemin = np.datetime64(data.index[-1], 'Y')
+# datemax = np.datetime64(data.index[0], 'Y') + np.timedelta64(1, 'Y')
+# ax.set_xlim(datemin, datemax)
+
+ax.set_ylabel('WPM')
+
+# Have x-axis for race #, then have a secondary one for date
+# 
+
+# plt.subplot(2, 1, 2)
+# plt.plot(data.index, data['Accuracy'], 'o-')
+# plt.title('Accuracy over time')
+
+plt.show()
