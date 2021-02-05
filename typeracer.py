@@ -27,13 +27,14 @@ def graph_history(soup):
 	for i in range(len(values))[::9]:
 		racenum, wpm, _, accuracy, _, _, *date = values[i:i+9]
 		accuracy = float(accuracy[:-1])
+		wpm = int(wpm)
 		if date[0] in date_converter:
 			date[0] = date_converter[date[0]]
 		scores = scores.append({'Race#': racenum, 'Date': datetime.strptime(' '.join(date), '%B %d, %Y'), 'WPM': wpm, 'Accuracy': accuracy}, ignore_index=True)
 	scores = scores.set_index(['Date']).sort_index(ascending=False)
 	return scores
 
-data = graph_history(get_history('itypesomewhatalot'))[:10]
+data = graph_history(get_history('itypesomewhatalot'))[:100]
 fig, ax = plt.subplots()
 ax.plot(data['Race#'], 'WPM', data=data)	
 
@@ -43,7 +44,7 @@ ax.plot(data['Race#'], 'WPM', data=data)
 # ax.set_xlim(datemin, datemax)
 
 ax.set_ylabel('WPM')
-
+ax.set_ylim(data['WPM'].min()-20, data['WPM'].max()+20)
 # Have x-axis for race #, then have a secondary one for date
 # 
 
