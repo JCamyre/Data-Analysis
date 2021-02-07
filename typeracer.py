@@ -35,21 +35,19 @@ def graph_history(soup):
 	return scores
 
 data = graph_history(get_history('itypesomewhatalot'))[:100]
-fig, ax = plt.subplots()
-ax.plot(data['Race#'], 'WPM', data=data)	
+fig, axs = plt.subplots(2, 1, figsize=(15, 5))
 
+axs[0].plot(data['WPM'].reset_index(drop=True))	
+axs[1].plot(data['Accuracy'].reset_index(drop=True))
 # ax.xaxis.set_major_locator(months)
 # datemin = np.datetime64(data.index[-1], 'Y')
 # datemax = np.datetime64(data.index[0], 'Y') + np.timedelta64(1, 'Y')
 # ax.set_xlim(datemin, datemax)
 
-ax.set_ylabel('WPM')
-ax.set_ylim(data['WPM'].min()-20, data['WPM'].max()+20)
+axs[0].set_ylabel('WPM')
+axs[0].set_ylim(data['WPM'].min()-20, data['WPM'].max()+20)
+axs[1].set_ylabel('Accuracy')
+axs[1].set_ylim(data['Accuracy'].min()-3, data['Accuracy'].max())
 # Have x-axis for race #, then have a secondary one for date
-# 
-
-# plt.subplot(2, 1, 2)
-# plt.plot(data.index, data['Accuracy'], 'o-')
-# plt.title('Accuracy over time')
 
 plt.show()
